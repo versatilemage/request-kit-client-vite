@@ -7,12 +7,40 @@ type jokeDataType = {
   punchline: string;
 };
 
+type catFactType = {
+  fact: string;
+  length: number;
+};
+
+type catFactsType = {
+  data: Array<{ fact: string; length: number }>;
+  current_page: number;
+  per_page: number;
+  last_page: number;
+};
+
 // Joke API Service
 export const jokeService = createCustomService(api.jokeAPI.http, {
   joke: {
     method: "get",
     endpoint: "/jokes/random",
     responseType: {} as jokeDataType,
+  },
+  jokes: {
+    method: "get",
+    endpoint: "/jokes/ten",
+    responseType: {} as jokeDataType[],
+  },
+  jokeById: {
+    method: "get",
+    endpoint: "/jokes/:id",
+    responseType: {} as jokeDataType,
+  },
+  // Edge case: Invalid endpoint to test error handling
+  invalidEndpoint: {
+    method: "get",
+    endpoint: "/jokes/invalid-endpoint-that-does-not-exist",
+    responseType: {} as any,
   },
 });
 
@@ -21,11 +49,22 @@ export const catService = createCustomService(api.catAPI.http, {
   fact: {
     method: "get",
     endpoint: "/fact",
-    responseType: {} as { fact: string },
+    responseType: {} as catFactType,
   },
   facts: {
     method: "get",
     endpoint: "/facts",
-    responseType: {} as { facts: string },
+    responseType: {} as catFactsType,
+  },
+  factWithLimit: {
+    method: "get",
+    endpoint: "/facts",
+    responseType: {} as catFactsType,
+  },
+  // Edge case: Invalid endpoint to test error handling
+  invalidEndpoint: {
+    method: "get",
+    endpoint: "/invalid-endpoint-that-does-not-exist",
+    responseType: {} as any,
   },
 });
